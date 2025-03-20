@@ -1,0 +1,22 @@
+ 1. Manual Testing
+Identify Input Fields: Test all user inputs (e.g., login forms, search bars).
+
+Inject Malicious Inputs:
+
+- Example: ' OR '1'='1 in the username field.
+- Enter anything into the password field (e.g., yourpassword).
+- Submit the form.
+
+Expected Behavior:
+
+If the application is vulnerable, the query will look like this:
+
+   SELECT * FROM users WHERE username = '' OR '1'='1' AND password = 'test'
+
+The condition '1'='1' is always true, so the database will return all rows, and the application will log you in without valid credentials.
+ 
+ -----------------------------------------------------------------
+
+- If the application logs you in without valid credentials or displays unexpected data (e.g., database records), it is vulnerable to SQL injection.
+
+- If the application rejects the input or shows an error, it may have some protections in place.
