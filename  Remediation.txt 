@@ -1,0 +1,41 @@
+Using prepared statements (also known as parameterized queries) is one of the most effective ways to prevent SQL injection vulnerabilities. Prepared statements ensure that user input is treated as data and not executable code. Below is an example of how to use prepared statements in Python with the sqlite3 library to fix the SQL injection vulnerability.
+
+
+Here’s the updated app.js file with SQL injection vulnerabilities fixed using prepared statements:
+
+// Secure login endpoint using prepared statements
+app.post('/login', (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    // Secure SQL query using prepared statements
+    const query = `SELECT * FROM users WHERE username = ? AND password = ?`;
+
+    db.all(query, [username, password], (err, rows) => {
+        if (err) {
+            return res.status(500).send('Database error');
+        }
+
+        if (rows.length > 0) {
+            res.send(`Login successful! Welcome, ${rows[0].username}`);
+        } else {
+            res.send('Login failed! Invalid username or password.');
+        }
+    });
+});
+
+Key Changes:
+1. Parameterized Query:
+
+The query uses placeholders (?) instead of directly interpolating user input.
+
+Example: SELECT * FROM users WHERE username = ? AND password = ?
+
+2. Passing Parameters:
+
+The db.all method takes an array of parameters [username, password] that are safely bound to the placeholders.
+
+3. Prevention of SQL Injection:
+
+The database driver ensures that the user input is treated as data and not executable SQL code.
+
